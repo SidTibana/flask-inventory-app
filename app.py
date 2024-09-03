@@ -7,7 +7,8 @@ app.secret_key = 'test_ahtglobal'
 
 # Docker
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@mysql/inventory_db'
-
+# local
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/inventory_db'
 db = SQLAlchemy(app)
 
 
