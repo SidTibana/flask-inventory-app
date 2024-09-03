@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    # Build the Docker image for the web service using the Dockerfile in the current directory
+    build: .
+    # Map port 5000 on the host to port 5000 in the container
+    ports:
+      - "5000:5000"
+    # Set environment variables for the web service
+    environment:
+      FLASK_APP: app.py
+      FLASK_RUN_HOST: 0.0.0.0
+      DATABASE_URL: mysql://root:root@mysql/inventory_db
+    # Mount the current directory to /app in the container, allowing code changes to be reflected immediately
+    volumes:
+      - .:/app
+    # Ensure the web service starts after the MySQL service is up
+    depends_on:
+      - mysql
+    # Run the command to set up the database and start the Flask application
+    entrypoint: [ "sh", "-c", "python create_tables.py && flask run" ]
+
+  mysql:
+    # Use the official MySQL 5.7 image from Docker Hub
+    image: mysql:5.7
+    # Set environment variables for the MySQL service
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventory_db
+    # Map port 3306 on the host to port 3306 in the container
+    ports:
+      - "3306:3306"

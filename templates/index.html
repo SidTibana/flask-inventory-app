@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
+            color: #333;
+            text-align: left;
+            margin-top: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        /* Custom style to position image in the top right corner */
+        .top-right {
+            position: absolute;
+            top: 0;
+            right: 200px;
+            margin: 20px;
+            /* Adjust margin as needed */
+        }
+
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            /* Adjust the spacing between buttons if needed */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Image insertion in the top right corner -->
+        <div class="top-right">
+            <img src="{{ url_for('static', filename='AHT_image.png') }}" alt="Description of Image" class="img-fluid">
+        </div>
+        <h1 class="my-4">Inventory List</h1>
+        <a href="{{ url_for('add_item') }}" class="btn btn-primary mb-4">Add New Item</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>MAC Address</th>
+                    <th>Serial Number</th>
+                    <th>Manufacturer</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.mac_address }}</td>
+                    <td>{{ item.serial_number }}</td>
+                    <td>{{ item.manufacturer }}</td>
+                    <td>{{ item.description }}</td>
+                    <td class="btn-group">
+                        <a href="{{ url_for('edit_item', id=item.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{{ url_for('delete_item', id=item.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- Flash Message Modal -->
+    <div class="modal fade" id="flashMessageModal" tabindex="-1" role="dialog" aria-labelledby="flashMessageLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="flashMessageLabel">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                    <div class="alert alert-{{ messages[0][0] }} alert-dismissible fade show" role="alert">
+                        {{ messages[0][1] }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Show flash message modal if a message exists -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if ("{{ get_flashed_messages() | length }}" > 0) {
+                $('#flashMessageModal').modal('show');
+            }
+        });
+    </script>
+</body>
+
+</html>
