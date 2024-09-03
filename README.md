@@ -17,7 +17,7 @@ Docker and Docker Compose installed.
 Running Locally
 1. Clone the Repository:
 
-git clone https://github.com/yourusername/your-repository.git
+git clone https://github.com/SidTibana/flask-inventory-app
 cd your-repository
 
 2. Install Dependencies:

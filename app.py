@@ -5,10 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.secret_key = 'test_ahtglobal'
 
-# Get the database URI from an environment variable
-# If the variable isn't set, use the local MySQL URI
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL', 'mysql://root:root@localhost/inventory_db')
+# Docker
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@mysql/inventory_db'
+
 db = SQLAlchemy(app)
 
 
